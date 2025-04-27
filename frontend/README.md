@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tumai-oai
 
-## Getting Started
+## Deployment:
+[website](https://v0-reinforcement-learning-ideas.vercel.app
+)
 
-First, run the development server:
+## How to Run Locally
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This project consists of three main parts: a FastAPI backend (teacher), a Python script (student), and a Next.js frontend.
+
+### Environment Variables
+
+You'll need to set up environment variables for the backend and frontend. Create `.env` files in the root directory and the `frontend` directory respectively, based on the examples below.
+
+**Backend (`./.env`):**
+
+```env
+# OpenAI API Key for AI functionalities
+OPENAI_API_KEY="<your_openai_api_key>"
+
+# AI Model Configuration
+DEFAULT_MODEL=gpt-4.1
+DEFAULT_TEMPERATURE=1
+
+# Path to local documents (if applicable)
+DOCUMENTS_PATH=./documents
+
+# Backend Configuration
+FASTAPI_URL=http://127.0.0.1:8000/
+
+# Supabase Credentials for database interaction
+NEXT_PUBLIC_SUPABASE_URL="<your_supabase_url>"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="<your_supabase_anon_key>"
+SUPABASE_SERVICE_ROLE_KEY="<your_supabase_service_role_key>" # Keep this secure!
+
+# Application Identity (Example: Charite)
+SELF_NAME="YourAppName"
+SELF_URL="http://127.0.0.1:8000/" # Adjust if needed
+SELF_LOGO_URL="<your_logo_url>" # Optional: Link to your app's logo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Frontend (`frontend/.env`):**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# OpenAI API Key (can be the same as backend)
+OPENAI_API_KEY="<your_openai_api_key>"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Supabase Credentials (Public)
+NEXT_PUBLIC_SUPABASE_URL="<your_supabase_url>"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="<your_supabase_anon_key>"
 
-## Learn More
+# Configuration for connecting to the backend
+FASTAPI_URL="http://127.0.0.1:8000"
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Running the Teacher FastAPI Backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This service exposes the data for the student simulation.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```sh
+# Navigate to the backend directory if necessary
+# (Assuming your main.py is in the root for uvicorn)
+uvicorn app.main:app --reload
+```
+The backend will be available at `http://127.0.0.1:8000`.
 
-## Deploy on Vercel
+### Running the Student Simulation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This script interacts with the backend to simulate learning internal data.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```sh
+# Ensure the backend is running
+python ./main.py
+```
+
+### Running the Frontend
+
+This provides the user interface.
+
+```sh
+cd frontend
+pnpm install # If you haven't installed dependencies
+pnpm run dev
+```
+The frontend will be available at `http://localhost:3000` (or another port if specified).
+
